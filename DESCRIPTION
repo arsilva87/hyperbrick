@@ -1,0 +1,31 @@
+Package: hyperbrick
+Type: Package
+Title: Accessory Tools for (Pre)Processing Hyperspectral Images
+Version: 1.0
+Date: 2021-11-22
+Description: Read and (pre)process hyperspectral images. These type of
+    sensor data is usually recorded in some raw format. This package
+    contains some easy-to-use functions to promptly build the image with
+    some basic radiometric calibrations and setting up the spatial information. 
+    Geometric correction can be done with band-to-band registration (translation 
+    and rotation). Further functionalities allows to compute sliding windows
+    statistics over the image.
+Authors@R: c(person(given = c("Anderson", "Rodrigo"),
+             family = "da Silva",
+             role = c("aut", "cre"),
+             email = "anderson.agro@hotmail.com",
+             comment = c(ORCID = "0000-0003-2518-542X")))
+Author: Anderson Rodrigo da Silva [aut, cre] (<https://orcid.org/0000-0003-2518-542X>)
+Maintainer: Anderson Rodrigo da Silva <anderson.agro@hotmail.com>
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+LazyLoad: true
+Depends: raster
+Imports: rgdal, OpenImageR, caTools, dfoptim, pbapply
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/arsilva87/hyperbrick
+BugReports: https://github.com/arsilva87/hyperbrick/issues
+RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)
