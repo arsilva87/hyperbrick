@@ -25,7 +25,7 @@
 #' @param reflectance_method A character for selecting the method to calculate
 #' the reflectance values. It must be one of the following:
 #' \code{"irradiance"} or \code{"white_panel"}. See Details.
-#' @param DOS A logical value. If \code{TRUE} (default), the value for the
+#' @param DOS A logical value. If \code{TRUE}, the value for the
 #' argument \code{dark_path} must be provided.
 #' @param dark_path (Optional) A character giving the path for the ENVI file containing
 #' the dark reference raw values, a.k.a. noisy energy.
@@ -69,12 +69,12 @@
 #'
 #' @export
 buildBrick <- function(path,
-                       path_hdr = sub(".dat", ".hdr", path),
+                       path_hdr = sub(".dat", ".hdr", path, fixed = TRUE),
                        hFOV = NULL, vFOV = NULL, height = NULL,
                        ref_layer = 1,
                        spectral_feature = c("raw", "radiance", "reflectance"),
                        reflectance_method = c("irradiance", "white_panel"),
-                       DOS = TRUE, dark_path = NULL, dark_quantile = 0.25,
+                       DOS = FALSE, dark_path = NULL, dark_quantile = 0.25,
                        white_path = NULL)
 {
   HDR <- read_hdr_envi(path_hdr, hFOV, vFOV, height)
