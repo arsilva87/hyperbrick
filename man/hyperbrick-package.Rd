@@ -24,7 +24,8 @@ License: \tab GPL (>= 2)\cr
 
 \note{
 \emph{hyperbrick} is an ongoing project.
-Any and all criticism, comments and suggestions are welcomed.
+Any and all criticism, comments and suggestions are welcome.
+URL \url{https://arsilva87.github.io/hyperbrick/}
 }
 
 \author{
