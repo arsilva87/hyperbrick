@@ -27,12 +27,34 @@
 #' But this should be used carefully, as rotation affects the spatial dimensions.
 #'
 #' @return An object of the same classe as the input \code{slave}, with
-#' the fixed extent.
+#' the fixed extent. An additional attribute called \code{'affine_pars'} is
+#' stored, containing the shift in x and y, in the same unit as the spatial
+#' extent of the image.
 #'
 #' @seealso [OpenImageR::HOG()], [registerBrick()], [registerBand3()]
 #'
 #' @examples
-#' #not yet
+#' # load an image
+#' path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
+#' dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
+#' im <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+#'                 ref_layer = 35, spectral_feature = 'radiance',
+#'                 DOS = TRUE, dark_path = dpath)
+#' print(im)
+#'
+#' # check bands 11 (550 nm) and 35 (670 nm)
+#' plot(im[[35]], col = gray.colors(20))
+#' plot(im[[11]], add = TRUE, legend = FALSE,
+#'     col = adjustcolor(heat.colors(20), 0.3))
+#'
+#' # register band 11 to band 35
+#' new11 <- registerBand(slave = im[[11]], master = im[[35]])
+#' plot(im[[35]], col = gray.colors(20))
+#' plot(new11, add = TRUE, legend = FALSE,
+#'     col = adjustcolor(heat.colors(20), 0.3))
+#'
+#' # see the xy shift on band 11
+#' attr(new11, "affine_pars")
 #'
 #' @importFrom OpenImageR HOG
 #' @importFrom dfoptim nmk
@@ -47,18 +69,18 @@ registerBand <- function(slave, master, ncells = 24, orient = 8)
    by <- res(master)[2] * nrow(master)/10
    ex <- extent(master)[]
    pol <- extent(c(ex[1]+bx, ex[2]-bx, ex[3]+by, ex[4]-by))
-   r1c <- crop(master, pol)
-   hog1 <- HOG(as.matrix(r1c), cells = ncells, orientations = orient)
+   r1c <- raster::as.matrix(crop(master, pol))
+   hog1 <- HOG(r1c, cells = ncells, orientations = orient)
    fun_sxy <- function(par) {
       sx <- par[1]; sy <- par[2]
       pol2 <- extent(pol[] - c(sx, sx, sy, sy))
-      r2c <- crop(slave, pol2)
-      hog2 <- HOG(as.matrix(r2c), cells = ncells, orientations = orient)
+      r2c <- raster::as.matrix(crop(slave, pol2))
+      hog2 <- HOG(r2c, cells = ncells, orientations = orient)
       dist(rbind(hog1, hog2))[1]
    }
    p <- nmk(c(0, 0), fun_sxy)
-   sxy <- p$par
-   r2_shifted <- shift(slave, dx = sxy[1], dy = sxy[2])
-   attr(r2_shifted, "shift") <- sxy
-   return(r2_shifted)
+   sxy <- c(x = p$par[1], y = p$par[2])
+   fixed <- shift(slave, dx = sxy[1], dy = sxy[2])
+   attr(fixed, "affine_pars") <- sxy
+   return(fixed)
 }

@@ -21,7 +21,9 @@ oriented gradients of the HOG descriptor. Default is 8. See \code{\link[OpenImag
 }
 \value{
 An object of the same classe as the input \code{slave}, with
-the fixed extent.
+the fixed extent. An additional attribute called \code{'affine_pars'} is
+stored, containing the shift in x and y, in the same unit as the spatial
+extent of the image.
 }
 \description{
 Hyperspectral image acquisition normaly causes spatial misalignment between
@@ -40,7 +42,27 @@ To register bands also with rotation fixes, please check \code{\link[=registerBa
 But this should be used carefully, as rotation affects the spatial dimensions.
 }
 \examples{
-#not yet
+# load an image
+path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
+dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
+im <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+                ref_layer = 35, spectral_feature = 'radiance',
+                DOS = TRUE, dark_path = dpath)
+print(im)
+
+# check bands 11 (550 nm) and 35 (670 nm)
+plot(im[[35]], col = gray.colors(20))
+plot(im[[11]], add = TRUE, legend = FALSE,
+    col = adjustcolor(heat.colors(20), 0.3))
+
+# register band 11 to band 35
+new11 <- registerBand(slave = im[[11]], master = im[[35]])
+plot(im[[35]], col = gray.colors(20))
+plot(new11, add = TRUE, legend = FALSE,
+    col = adjustcolor(heat.colors(20), 0.3))
+
+# see the xy shift on band 11
+attr(new11, "affine_pars")
 
 }
 \seealso{

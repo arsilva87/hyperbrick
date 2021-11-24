@@ -47,7 +47,13 @@
 #' @seealso [buildBrick()]
 #'
 #' @examples
-#' # not yet
+#' # Example 1
+#' path_hdr <- system.file('exdata', 'obory.hdr', package = 'hyperbrick')
+#' readLines(path_hdr)
+#' read_hdr_envi(path_hdr)
+#'
+#' # Example 2 - set up the CRS to UTM and retrieve extents
+#' read_hdr_envi(path_hdr, hFOV = 36.8, vFOV = 36.8, height = 45)
 #'
 #' @importFrom rgdal project
 #' @importFrom utils read.table

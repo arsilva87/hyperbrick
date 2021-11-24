@@ -28,7 +28,7 @@
 #' @param DOS A logical value. If \code{TRUE}, the value for the
 #' argument \code{dark_path} must be provided.
 #' @param dark_path (Optional) A character giving the path for the ENVI file containing
-#' the dark reference raw values, a.k.a. noisy energy.
+#' the dark reference raw values, a.k.a. noisy energy. See Details.
 #' @param dark_quantile A numeric value used to calculate the quantile
 #' of the dark reference raw values of each spectral band. Default is
 #' 0.25. This will be used for the DOS radiometric correction.
@@ -43,6 +43,7 @@
 #' \code{"radiance"} is obtained by multiplying the raw values of each
 #' spectral band by the respective "gain" values registered in the header file
 #' (if available).
+#'
 #' If \code{"reflectance"} is passed as value for the argument
 #' \code{spectral_feature}, then the value of the next argument,
 #' \code{reflectance_method}, will be used to calculate the reflectance
@@ -54,12 +55,63 @@
 #' the respective argument. Note that \code{buildBrick} will consider value
 #' of the white panel as the maximum.
 #'
+#' Make sure that the header file (.hdr) has the same name as the
+#' ENVI (.dat) file when pointing them at the arguments \code{dark_path}
+#' or \code{white_path}.
+#'
 #' @return A \code{RasterBrick} object (from the package [raster]).
 #'
 #' @seealso [read_hdr_envi()], [raster::brick()]
 #'
 #' @examples
-#' #not yet
+#' # Point to an ENVI data
+#' path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
+#' # First, let's check the header file
+#' # There are 81 bands. First two are noisy.
+#' # Irradiance is available.
+#' path_hdr <- system.file('exdata', 'obory.hdr', package = 'hyperbrick')
+#' readLines(path_hdr)
+#'
+#' # Example 1 - raw values
+#' path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
+#' b <- buildBrick(path)
+#' print(b)
+#' plot(b, 35)
+#'
+#' # Example 2 - set up CRS and compute radiance
+#' br <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+#'                 ref_layer = 35, spectral_feature = 'radiance')
+#' print(br)
+#' plot(br, 35)
+#'
+#' # Example 3 - DOS correction
+#' dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
+#' brd <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+#'                  ref_layer = 35, spectral_feature = 'radiance',
+#'                  DOS = TRUE, dark_path = dpath)
+#' print(brd)
+#' plot(brd, 35)
+#'
+#' # Example 4 - compute reflectance
+#' bre <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+#'                  ref_layer = 35, spectral_feature = 'reflectance',
+#'                  reflectance_method = "irradiance",
+#'                  DOS = TRUE, dark_path = dpath)
+#' print(bre)
+#' plot(bre, 35)
+#'
+#' # Example 5 - there is a white-reference panel in this image!
+#' idmax <- which.max(bre[[35]])
+#' plot(bre, 35)
+#' points(xyFromCell(bre[[35]], idmax), pch = 3)
+#'
+#' bre2 <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+#'                   ref_layer = 35, spectral_feature = 'reflectance',
+#'                   reflectance_method = "white_panel",
+#'                   white_path = path,
+#'                   DOS = TRUE, dark_path = dpath)
+#' print(bre2)
+#' plot(bre2, 35)
 #'
 #' @importFrom caTools read.ENVI
 #' @importFrom stats quantile
@@ -84,7 +136,8 @@ buildBrick <- function(path,
     if(is.null(dark_path))
       stop("Please provide the path for the dark reference file.")
     dark_raw <- read.ENVI(dark_path,
-                                   sub(".dat", ".hdr", dark_path))
+                                   sub(".dat", ".hdr", dark_path,
+                                       fixed = TRUE))
     dark_cube <- array(dark_raw, dim = HDR$dim)
     dark_vals <- apply(dark_cube, 3, quantile,
                        p = dark_quantile)
@@ -100,7 +153,8 @@ buildBrick <- function(path,
       A <- sweep(rad_cube, 3, HDR$irradiance, FUN = "/")
     } else {
       white_raw <- read.ENVI(white_path,
-                                      sub(".dat", ".hdr", white_path))
+                                      sub(".dat", ".hdr", white_path,
+                                          fixed = TRUE))
       white_cube <- array(white_raw, dim = HDR$dim)
       if (DOS) white_cube <- sweep(white_cube, 3, dark_vals)
       white_vals <- apply(white_cube, 3, max)

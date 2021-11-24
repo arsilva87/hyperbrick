@@ -15,7 +15,8 @@ of a list of spatial extents giving the location of the non-overlapping
 sliding windows that covers the entire image.}
 
 \item{fun}{A vectorized function indicating the statistics to be calculated
-within each sliding-windows, e.g. \code{\link[=median]{median()}} (default), \code{\link[=mean]{mean()}}, \code{\link[=sd]{sd()}}.}
+within each sliding-windows, e.g. \code{median} (default), \code{mean},
+\code{sd}.}
 }
 \value{
 A vector or matrix containing the estimates of each sliding windows.
@@ -25,7 +26,19 @@ Calculate focal statistics on a hyperspectral image using non-overlapping
 sliding windows.
 }
 \examples{
-#not yet
+p <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
+im <- buildBrick(p, ref_layer = 35,
+                spectral_feature = "radiance",
+                hFOV = 36.8, vFOV = 36.8, height = 45)
+print(im)
+plotRGB(im, r = 63, b = 34, g = 11, scale = 90)
+
+ext <- extent(c(512700.2, 512715, 5769462, 5769477))
+sw <- slideWindows(ext, n = c(7, 7))
+lapply(sw, lines, col = "white")
+
+sb <- slideBrick(im, sw, fun = mean)
+head(sb)
 
 }
 \seealso{

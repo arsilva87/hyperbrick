@@ -29,7 +29,26 @@ the spatial coordinates (2D in this case), \eqn{A} is a rotation matrix
 considered here), and \eqn{b} is the translation (xy shift) parameters.
 }
 \examples{
-# not yet
+p <- system.file('exdata', 'soybean.tif', package = 'hyperbrick')
+im <- brick(p)
+print(im)
+
+# view band-3
+plot(im[[3]], col = gray.colors(20))
+
+# draw a spatial polygon on image
+pol <- Polygon(extent(c(40, 85, 50, 150)))
+lines(pol)
+
+# rotate and shift the spatial polygon
+new_pol <- affineCoords(pol, angle = -3, xy_shift = c(-11, 0))
+plot(im[[3]], col = gray.colors(20))
+lines(new_pol)
+
+# do some analysis within it, like:
+new_pols <- SpatialPolygons(list(Polygons(list(Polygon(new_pol)), "id0")))
+plot(mask(im[[3]], new_pols))
+mean(extract(im[[3]], new_pols)[[1]])
 
 }
 \seealso{

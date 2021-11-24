@@ -6,14 +6,14 @@
 \usage{
 buildBrick(
   path,
-  path_hdr = sub(".dat", ".hdr", path),
+  path_hdr = sub(".dat", ".hdr", path, fixed = TRUE),
   hFOV = NULL,
   vFOV = NULL,
   height = NULL,
   ref_layer = 1,
   spectral_feature = c("raw", "radiance", "reflectance"),
   reflectance_method = c("irradiance", "white_panel"),
-  DOS = TRUE,
+  DOS = FALSE,
   dark_path = NULL,
   dark_quantile = 0.25,
   white_path = NULL
@@ -45,11 +45,11 @@ See Details.}
 the reflectance values. It must be one of the following:
 \code{"irradiance"} or \code{"white_panel"}. See Details.}
 
-\item{DOS}{A logical value. If \code{TRUE} (default), the value for the
+\item{DOS}{A logical value. If \code{TRUE}, the value for the
 argument \code{dark_path} must be provided.}
 
 \item{dark_path}{(Optional) A character giving the path for the ENVI file containing
-the dark reference raw values, a.k.a. noisy energy.}
+the dark reference raw values, a.k.a. noisy energy. See Details.}
 
 \item{dark_quantile}{A numeric value used to calculate the quantile
 of the dark reference raw values of each spectral band. Default is
@@ -79,6 +79,7 @@ UTM zone and the spatial extent, and set up the coordinate reference system.
 \code{"radiance"} is obtained by multiplying the raw values of each
 spectral band by the respective "gain" values registered in the header file
 (if available).
+
 If \code{"reflectance"} is passed as value for the argument
 \code{spectral_feature}, then the value of the next argument,
 \code{reflectance_method}, will be used to calculate the reflectance
@@ -89,9 +90,60 @@ sensor. If \code{"white_panel"} is chosen, then the path for the ENVI
 file containing the image of the white panel must be passed as value for
 the respective argument. Note that \code{buildBrick} will consider value
 of the white panel as the maximum.
+
+Make sure that the header file (.hdr) has the same name as the
+ENVI (.dat) file when pointing them at the arguments \code{dark_path}
+or \code{white_path}.
 }
 \examples{
-#not yet
+# Point to an ENVI data
+path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
+# First, let's check the header file
+# There are 81 bands. First two are noisy.
+# Irradiance is available.
+path_hdr <- system.file('exdata', 'obory.hdr', package = 'hyperbrick')
+readLines(path_hdr)
+
+# Example 1 - raw values
+path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
+b <- buildBrick(path)
+print(b)
+plot(b, 35)
+
+# Example 2 - set up CRS and compute radiance
+br <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+                ref_layer = 35, spectral_feature = 'radiance')
+print(br)
+plot(br, 35)
+
+# Example 3 - DOS correction
+dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
+brd <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+                 ref_layer = 35, spectral_feature = 'radiance',
+                 DOS = TRUE, dark_path = dpath)
+print(brd)
+plot(brd, 35)
+
+# Example 4 - compute reflectance
+bre <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+                 ref_layer = 35, spectral_feature = 'reflectance',
+                 reflectance_method = "irradiance",
+                 DOS = TRUE, dark_path = dpath)
+print(bre)
+plot(bre, 35)
+
+# Example 5 - there is a white-reference panel in this image!
+idmax <- which.max(bre[[35]])
+plot(bre, 35)
+points(xyFromCell(bre[[35]], idmax), pch = 3)
+
+bre2 <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
+                  ref_layer = 35, spectral_feature = 'reflectance',
+                  reflectance_method = "white_panel",
+                  white_path = path,
+                  DOS = TRUE, dark_path = dpath)
+print(bre2)
+plot(bre2, 35)
 
 }
 \seealso{

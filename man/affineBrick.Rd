@@ -30,7 +30,17 @@ considered here), and \eqn{b} is the translation (xy shift) parameters.
 Affine transformation affects the image dimension.
 }
 \examples{
-# not yet
+p <- system.file('exdata', 'soybean.tif', package = 'hyperbrick')
+im <- brick(p)
+print(im)
+
+# view band-3
+plot(im[[3]], col = gray.colors(20))
+
+# rotate band-3 at 3.5 degrees counter-clockwise
+b3_rot <- affineBrick(im[[3]], angle = 3.5)
+plot(b3_rot, add = TRUE, legend = FALSE,
+    col = adjustcolor(terrain.colors(20), 0.5))
 
 }
 \seealso{

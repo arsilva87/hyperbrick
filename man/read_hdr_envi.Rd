@@ -58,7 +58,13 @@ the UTM zone and the spatial extent, and set up the coordinate reference
 system.
 }
 \examples{
-# not yet
+# Example 1
+path_hdr <- system.file('exdata', 'obory.hdr', package = 'hyperbrick')
+readLines(path_hdr)
+read_hdr_envi(path_hdr)
+
+# Example 2 - set up the CRS to UTM and retrieve extents
+read_hdr_envi(path_hdr, hFOV = 36.8, vFOV = 36.8, height = 45)
 
 }
 \seealso{

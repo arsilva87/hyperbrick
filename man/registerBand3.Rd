@@ -4,7 +4,7 @@
 \alias{registerBand3}
 \title{Single Band-to-Band Registration (Rotation and Translation)}
 \usage{
-registerBand3(slave, master, ncells = 24, orient = 8)
+registerBand3(slave, master, ncells = 24, orient = 8, start_affine)
 }
 \arguments{
 \item{slave}{An object of class \code{RasterLayer} (from package
@@ -18,10 +18,18 @@ gradients of the HOG descriptor. Default is 24. See \code{\link[OpenImageR:HOG]{
 
 \item{orient}{An integer giving the number of orientations to compute the
 oriented gradients of the HOG descriptor. Default is 8. See \code{\link[OpenImageR:HOG]{OpenImageR::HOG()}}.}
+
+\item{start_affine}{A numeric vector containing the starting values for the
+affine parameters to be optimized, i.e., the shift in x and y and the
+rotation angle (in degrees). Example: \code{start_affine = c(1, 0, -2)},
+which indicates a shift of 1 in the x-axis, 0 in the y-axis and a
+clockwise (negative values) angle of 2 degrees. See more in \code{\link[=affineBrick]{affineBrick()}}.}
 }
 \value{
 An object of the same classe as the input \code{slave}, with
-the fixed extent.
+the fixed extent. An additional attribute called \code{'affine_pars'} is
+stored, containing the rotation angle (degrees) and the shift in x and y
+in the same unit as the spatial extent of the image.
 }
 \description{
 Hyperspectral image acquisition normaly causes spatial misalignment between
@@ -35,11 +43,28 @@ with a 'master' (reference) band.
 }
 \details{
 This should be used carefully, as rotation affects the spatial
-dimensions. The affine parameters are estimated using a general
-optimization algorithm.
+dimensions. It is recommended to try \code{\link[=registerBand]{registerBand()}} first.
+
+The affine parameters are estimated using a general optimization algorithm.
 }
 \examples{
-#not yet
+p <- system.file('exdata', 'soybean.tif', package = 'hyperbrick')
+im <- brick(p)
+print(im)
+
+# see how layer 1 is misregistered
+plot(im[[3]], col = gray.colors(20))
+plot(im[[1]], add = TRUE, legend = FALSE,
+     col = adjustcolor(terrain.colors(20), 0.6))
+
+b1_reg <- registerBand3(slave = im[[1]], master = im[[3]],
+                        start_affine = c(0, 0, -2.5))
+attr(b1_reg, "affine_pars")
+
+plot(im[[3]], col = gray.colors(20))
+plot(b1_reg, add = TRUE, legend = FALSE,
+     col = adjustcolor(terrain.colors(20), 0.6))
+
 
 }
 \seealso{
