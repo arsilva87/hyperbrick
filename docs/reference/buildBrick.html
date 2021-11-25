@@ -78,7 +78,7 @@ reference layer and inputs of the camera, convert the row values
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hyperbrick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
       </span>
     </div>
 
@@ -138,7 +138,6 @@ reference layer and inputs of the camera, convert the row values
   ref_layer <span class='op'>=</span> <span class='fl'>1</span>,
   spectral_feature <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"raw"</span>, <span class='st'>"radiance"</span>, <span class='st'>"reflectance"</span><span class='op'>)</span>,
   reflectance_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"irradiance"</span>, <span class='st'>"white_panel"</span><span class='op'>)</span>,
-  DOS <span class='op'>=</span> <span class='cn'>FALSE</span>,
   dark_path <span class='op'>=</span> <span class='cn'>NULL</span>,
   dark_quantile <span class='op'>=</span> <span class='fl'>0.25</span>,
   white_path <span class='op'>=</span> <span class='cn'>NULL</span>
@@ -189,14 +188,10 @@ the reflectance values. It must be one of the following:
 <code>"irradiance"</code> or <code>"white_panel"</code>. See Details.</p></td>
     </tr>
     <tr>
-      <th>DOS</th>
-      <td><p>A logical value. If <code>TRUE</code>, the value for the
-argument <code>dark_path</code> must be provided.</p></td>
-    </tr>
-    <tr>
       <th>dark_path</th>
       <td><p>(Optional) A character giving the path for the ENVI file containing
-the dark reference raw values, a.k.a. noisy energy. See Details.</p></td>
+the dark reference raw values, a.k.a. noisy energy, for DOS calibration.
+See Details.</p></td>
     </tr>
     <tr>
       <th>dark_quantile</th>
@@ -311,8 +306,8 @@ or <code>white_path</code>.</p>
 <span class='r-in'><span class='co'># Example 3 - DOS correction</span></span>
 <span class='r-in'><span class='va'>dpath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>'exdata'</span>, <span class='st'>'obory_dark.dat'</span>, package <span class='op'>=</span> <span class='st'>'hyperbrick'</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>brd</span> <span class='op'>&lt;-</span> <span class='fu'>buildBrick</span><span class='op'>(</span><span class='va'>path</span>, hFOV <span class='op'>=</span> <span class='fl'>36.8</span>, vFOV <span class='op'>=</span> <span class='fl'>36.8</span>, height <span class='op'>=</span> <span class='fl'>45</span>,</span>
-<span class='r-in'>                 ref_layer <span class='op'>=</span> <span class='fl'>35</span>, spectral_feature <span class='op'>=</span> <span class='st'>'radiance'</span>,</span>
-<span class='r-in'>                 DOS <span class='op'>=</span> <span class='cn'>TRUE</span>, dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
+<span class='r-in'>                  ref_layer <span class='op'>=</span> <span class='fl'>35</span>, spectral_feature <span class='op'>=</span> <span class='st'>'radiance'</span>,</span>
+<span class='r-in'>                  dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>brd</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> class      : RasterBrick </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> dimensions : 128, 128, 16384, 81  (nrow, ncol, ncell, nlayers)</span>
@@ -329,9 +324,9 @@ or <code>white_path</code>.</p>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Example 4 - compute reflectance</span></span>
 <span class='r-in'><span class='va'>bre</span> <span class='op'>&lt;-</span> <span class='fu'>buildBrick</span><span class='op'>(</span><span class='va'>path</span>, hFOV <span class='op'>=</span> <span class='fl'>36.8</span>, vFOV <span class='op'>=</span> <span class='fl'>36.8</span>, height <span class='op'>=</span> <span class='fl'>45</span>,</span>
-<span class='r-in'>                 ref_layer <span class='op'>=</span> <span class='fl'>35</span>, spectral_feature <span class='op'>=</span> <span class='st'>'reflectance'</span>,</span>
-<span class='r-in'>                 reflectance_method <span class='op'>=</span> <span class='st'>"irradiance"</span>,</span>
-<span class='r-in'>                 DOS <span class='op'>=</span> <span class='cn'>TRUE</span>, dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
+<span class='r-in'>                  ref_layer <span class='op'>=</span> <span class='fl'>35</span>, spectral_feature <span class='op'>=</span> <span class='st'>'reflectance'</span>,</span>
+<span class='r-in'>                  reflectance_method <span class='op'>=</span> <span class='st'>"irradiance"</span>,</span>
+<span class='r-in'>                  dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>bre</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> class      : RasterBrick </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> dimensions : 128, 128, 16384, 81  (nrow, ncol, ncell, nlayers)</span>
@@ -344,18 +339,18 @@ or <code>white_path</code>.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> max values :  0.0000000,  0.0000000,  0.3758935,  0.3821301,  0.3970138,  0.3996770,  0.3953777,  0.3864533,  0.3866602,  0.3941096,  0.3871019,  0.3900937,  0.3972046,  0.4106956,  0.4212508, ... </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>bre</span>, <span class='fl'>35</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># Example 5 - there is a white-reference panel in this image!</span></span>
-<span class='r-in'><span class='va'>idmax</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/raster/man/which.minmax.html'>which.max</a></span><span class='op'>(</span><span class='va'>bre</span><span class='op'>[[</span><span class='fl'>35</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>bre</span>, <span class='fl'>35</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/xyFromCell.html'>xyFromCell</a></span><span class='op'>(</span><span class='va'>bre</span><span class='op'>[[</span><span class='fl'>35</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>idmax</span><span class='op'>)</span>, pch <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
 <span class='r-plt img'><img src='buildBrick-4.png' alt='' width='700' height='433' /></span>
 <span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 5 - there is a white-reference panel in this image</span></span>
+<span class='r-in'><span class='va'>idmax</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/raster/man/which.minmax.html'>which.max</a></span><span class='op'>(</span><span class='va'>bre</span><span class='op'>[[</span><span class='fl'>35</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>bre</span>, <span class='fl'>35</span>, asp <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/xyFromCell.html'>xyFromCell</a></span><span class='op'>(</span><span class='va'>bre</span><span class='op'>[[</span><span class='fl'>35</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>idmax</span><span class='op'>)</span>, pch <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='buildBrick-5.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
 <span class='r-in'><span class='va'>bre2</span> <span class='op'>&lt;-</span> <span class='fu'>buildBrick</span><span class='op'>(</span><span class='va'>path</span>, hFOV <span class='op'>=</span> <span class='fl'>36.8</span>, vFOV <span class='op'>=</span> <span class='fl'>36.8</span>, height <span class='op'>=</span> <span class='fl'>45</span>,</span>
-<span class='r-in'>                  ref_layer <span class='op'>=</span> <span class='fl'>35</span>, spectral_feature <span class='op'>=</span> <span class='st'>'reflectance'</span>,</span>
-<span class='r-in'>                  reflectance_method <span class='op'>=</span> <span class='st'>"white_panel"</span>,</span>
-<span class='r-in'>                  white_path <span class='op'>=</span> <span class='va'>path</span>,</span>
-<span class='r-in'>                  DOS <span class='op'>=</span> <span class='cn'>TRUE</span>, dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
+<span class='r-in'>                   ref_layer <span class='op'>=</span> <span class='fl'>35</span>, spectral_feature <span class='op'>=</span> <span class='st'>'reflectance'</span>,</span>
+<span class='r-in'>                   reflectance_method <span class='op'>=</span> <span class='st'>"white_panel"</span>,</span>
+<span class='r-in'>                   white_path <span class='op'>=</span> <span class='va'>path</span>, dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>bre2</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> class      : RasterBrick </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> dimensions : 128, 128, 16384, 81  (nrow, ncol, ncell, nlayers)</span>
@@ -368,7 +363,7 @@ or <code>white_path</code>.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> max values :          1,          1,          1,          1,          1,          1,          1,          1,          1,          1,          1,          1,          1,          1,          1, ... </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>bre2</span>, <span class='fl'>35</span><span class='op'>)</span></span>
-<span class='r-plt img'><img src='buildBrick-5.png' alt='' width='700' height='433' /></span>
+<span class='r-plt img'><img src='buildBrick-6.png' alt='' width='700' height='433' /></span>
 <span class='r-in'></span>
 </pre>
   </div>

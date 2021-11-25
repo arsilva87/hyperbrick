@@ -75,7 +75,7 @@ considered here), and \(b\) is the translation (xy shift) parameters." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hyperbrick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
       </span>
     </div>
 
@@ -172,7 +172,7 @@ translation parameters).</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># view band-3</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>im</span><span class='op'>[[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>]</span>, col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.colors.html'>gray.colors</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>im</span><span class='op'>[[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>]</span>, col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.colors.html'>gray.colors</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, asp <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># rotate band-3 at 3.5 degrees counter-clockwise</span></span>
 <span class='r-in'><span class='va'>b3_rot</span> <span class='op'>&lt;-</span> <span class='fu'>affineBrick</span><span class='op'>(</span><span class='va'>im</span><span class='op'>[[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>]</span>, angle <span class='op'>=</span> <span class='fl'>3.5</span><span class='op'>)</span></span>
