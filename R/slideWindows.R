@@ -23,7 +23,7 @@
 #' plotRGB(im)
 #'
 #' sw <- slideWindows(im, n = c(8, 8))
-#' lapply(sw, lines)
+#' lapply(sw, lines) -> null_obj
 #' lines(sw[[1]], col = "white", lwd = 3)
 #' lines(sw[[64]], col = "white", lwd = 3)
 #'
@@ -31,7 +31,7 @@
 #' ext <- extent(c(30, 350, 150, 230))
 #' lines(ext, col = "red", lwd = 3)
 #' sw2 <- slideWindows(ext, n = c(18, 6))
-#' lapply(sw2, lines, col = "red")
+#' lapply(sw2, lines, col = "red") -> null_obj
 #'
 #' @importFrom raster extent
 #'

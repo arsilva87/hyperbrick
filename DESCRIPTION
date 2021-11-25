@@ -1,7 +1,7 @@
 Package: hyperbrick
 Type: Package
 Title: Accessory Tools for (Pre)Processing Hyperspectral Images
-Version: 1.0
+Version: 0.1
 Date: 2021-11-22
 Description: Read and (pre)process hyperspectral images. These type of
     sensor data is usually recorded in some raw format. This package

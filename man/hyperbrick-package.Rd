@@ -16,7 +16,7 @@ Read and (pre)process hyperspectral images. These type of
 \tabular{ll}{
 Package: \tab hyperbrick\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
+Version: \tab 0.1\cr
 Date: \tab 2021-11-22\cr
 License: \tab GPL (>= 2)\cr
 }

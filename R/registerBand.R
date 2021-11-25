@@ -39,17 +39,17 @@
 #' dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
 #' im <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
 #'                 ref_layer = 35, spectral_feature = 'radiance',
-#'                 DOS = TRUE, dark_path = dpath)
+#'                 dark_path = dpath)
 #' print(im)
 #'
 #' # check bands 11 (550 nm) and 35 (670 nm)
-#' plot(im[[35]], col = gray.colors(20))
+#' plot(im[[35]], col = gray.colors(20), asp = 0)
 #' plot(im[[11]], add = TRUE, legend = FALSE,
 #'     col = adjustcolor(heat.colors(20), 0.3))
 #'
 #' # register band 11 to band 35
 #' new11 <- registerBand(slave = im[[11]], master = im[[35]])
-#' plot(im[[35]], col = gray.colors(20))
+#' plot(im[[35]], col = gray.colors(20), asp = 0)
 #' plot(new11, add = TRUE, legend = FALSE,
 #'     col = adjustcolor(heat.colors(20), 0.3))
 #'

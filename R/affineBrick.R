@@ -27,7 +27,7 @@
 #' print(im)
 #'
 #' # view band-3
-#' plot(im[[3]], col = gray.colors(20))
+#' plot(im[[3]], col = gray.colors(20), asp = 0)
 #'
 #' # rotate band-3 at 3.5 degrees counter-clockwise
 #' b3_rot <- affineBrick(im[[3]], angle = 3.5)

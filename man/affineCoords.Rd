@@ -34,7 +34,7 @@ im <- brick(p)
 print(im)
 
 # view band-3
-plot(im[[3]], col = gray.colors(20))
+plot(im[[3]], col = gray.colors(20), asp = 0)
 
 # draw a spatial polygon on image
 pol <- Polygon(extent(c(40, 85, 50, 150)))
@@ -42,7 +42,7 @@ lines(pol)
 
 # rotate and shift the spatial polygon
 new_pol <- affineCoords(pol, angle = -3, xy_shift = c(-11, 0))
-plot(im[[3]], col = gray.colors(20))
+plot(im[[3]], col = gray.colors(20), asp = 0)
 lines(new_pol)
 
 # do some analysis within it, like:

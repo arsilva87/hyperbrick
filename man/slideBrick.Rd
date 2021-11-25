@@ -35,7 +35,7 @@ plotRGB(im, r = 63, b = 34, g = 11, scale = 90)
 
 ext <- extent(c(512700.2, 512715, 5769462, 5769477))
 sw <- slideWindows(ext, n = c(7, 7))
-lapply(sw, lines, col = "white")
+lapply(sw, lines, col = "white") -> null_obj
 
 sb <- slideBrick(im, sw, fun = mean)
 head(sb)

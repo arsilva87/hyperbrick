@@ -53,7 +53,7 @@ im <- brick(p)
 print(im)
 
 # see how layer 1 is misregistered
-plot(im[[3]], col = gray.colors(20))
+plot(im[[3]], col = gray.colors(20), asp = 0)
 plot(im[[1]], add = TRUE, legend = FALSE,
      col = adjustcolor(terrain.colors(20), 0.6))
 
@@ -61,7 +61,7 @@ b1_reg <- registerBand3(slave = im[[1]], master = im[[3]],
                         start_affine = c(0, 0, -2.5))
 attr(b1_reg, "affine_pars")
 
-plot(im[[3]], col = gray.colors(20))
+plot(im[[3]], col = gray.colors(20), asp = 0)
 plot(b1_reg, add = TRUE, legend = FALSE,
      col = adjustcolor(terrain.colors(20), 0.6))
 

@@ -25,10 +25,9 @@
 #' @param reflectance_method A character for selecting the method to calculate
 #' the reflectance values. It must be one of the following:
 #' \code{"irradiance"} or \code{"white_panel"}. See Details.
-#' @param DOS A logical value. If \code{TRUE}, the value for the
-#' argument \code{dark_path} must be provided.
 #' @param dark_path (Optional) A character giving the path for the ENVI file containing
-#' the dark reference raw values, a.k.a. noisy energy. See Details.
+#' the dark reference raw values, a.k.a. noisy energy, for DOS calibration.
+#' See Details.
 #' @param dark_quantile A numeric value used to calculate the quantile
 #' of the dark reference raw values of each spectral band. Default is
 #' 0.25. This will be used for the DOS radiometric correction.
@@ -87,29 +86,28 @@
 #' # Example 3 - DOS correction
 #' dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
 #' brd <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
-#'                  ref_layer = 35, spectral_feature = 'radiance',
-#'                  DOS = TRUE, dark_path = dpath)
+#'                   ref_layer = 35, spectral_feature = 'radiance',
+#'                   dark_path = dpath)
 #' print(brd)
 #' plot(brd, 35)
 #'
 #' # Example 4 - compute reflectance
 #' bre <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
-#'                  ref_layer = 35, spectral_feature = 'reflectance',
-#'                  reflectance_method = "irradiance",
-#'                  DOS = TRUE, dark_path = dpath)
+#'                   ref_layer = 35, spectral_feature = 'reflectance',
+#'                   reflectance_method = "irradiance",
+#'                   dark_path = dpath)
 #' print(bre)
 #' plot(bre, 35)
 #'
-#' # Example 5 - there is a white-reference panel in this image!
+#' # Example 5 - there is a white-reference panel in this image
 #' idmax <- which.max(bre[[35]])
-#' plot(bre, 35)
+#' plot(bre, 35, asp = 0)
 #' points(xyFromCell(bre[[35]], idmax), pch = 3)
 #'
 #' bre2 <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
-#'                   ref_layer = 35, spectral_feature = 'reflectance',
-#'                   reflectance_method = "white_panel",
-#'                   white_path = path,
-#'                   DOS = TRUE, dark_path = dpath)
+#'                    ref_layer = 35, spectral_feature = 'reflectance',
+#'                    reflectance_method = "white_panel",
+#'                    white_path = path, dark_path = dpath)
 #' print(bre2)
 #' plot(bre2, 35)
 #'
@@ -126,18 +124,16 @@ buildBrick <- function(path,
                        ref_layer = 1,
                        spectral_feature = c("raw", "radiance", "reflectance"),
                        reflectance_method = c("irradiance", "white_panel"),
-                       DOS = FALSE, dark_path = NULL, dark_quantile = 0.25,
+                       dark_path = NULL, dark_quantile = 0.25,
                        white_path = NULL)
 {
   HDR <- read_hdr_envi(path_hdr, hFOV, vFOV, height)
   dat <- read.ENVI(path, path_hdr)
   A <- array(dat, dim = HDR$dim)
-  if (DOS) {
-    if(is.null(dark_path))
-      stop("Please provide the path for the dark reference file.")
+  if (!is.null(dark_path)) {
     dark_raw <- read.ENVI(dark_path,
-                                   sub(".dat", ".hdr", dark_path,
-                                       fixed = TRUE))
+                          sub(".dat", ".hdr", dark_path,
+                              fixed = TRUE))
     dark_cube <- array(dark_raw, dim = HDR$dim)
     dark_vals <- apply(dark_cube, 3, quantile,
                        p = dark_quantile)
@@ -153,10 +149,10 @@ buildBrick <- function(path,
       A <- sweep(rad_cube, 3, HDR$irradiance, FUN = "/")
     } else {
       white_raw <- read.ENVI(white_path,
-                                      sub(".dat", ".hdr", white_path,
-                                          fixed = TRUE))
+                             sub(".dat", ".hdr", white_path,
+                                 fixed = TRUE))
       white_cube <- array(white_raw, dim = HDR$dim)
-      if (DOS) white_cube <- sweep(white_cube, 3, dark_vals)
+      if (!is.null(dark_path)) white_cube <- sweep(white_cube, 3, dark_vals)
       white_vals <- apply(white_cube, 3, max)
       A <- sweep(A, 3, white_vals, FUN = "/")
     }

@@ -48,7 +48,7 @@ path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
 dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
 im <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
                 ref_layer = 35, spectral_feature = 'radiance',
-                DOS = TRUE, dark_path = dpath)
+                dark_path = dpath)
 print(im)
 plotRGB(im, r = 63, g = 34, b = 11, scale = 90)
 

@@ -13,7 +13,6 @@ buildBrick(
   ref_layer = 1,
   spectral_feature = c("raw", "radiance", "reflectance"),
   reflectance_method = c("irradiance", "white_panel"),
-  DOS = FALSE,
   dark_path = NULL,
   dark_quantile = 0.25,
   white_path = NULL
@@ -45,11 +44,9 @@ See Details.}
 the reflectance values. It must be one of the following:
 \code{"irradiance"} or \code{"white_panel"}. See Details.}
 
-\item{DOS}{A logical value. If \code{TRUE}, the value for the
-argument \code{dark_path} must be provided.}
-
 \item{dark_path}{(Optional) A character giving the path for the ENVI file containing
-the dark reference raw values, a.k.a. noisy energy. See Details.}
+the dark reference raw values, a.k.a. noisy energy, for DOS calibration.
+See Details.}
 
 \item{dark_quantile}{A numeric value used to calculate the quantile
 of the dark reference raw values of each spectral band. Default is
@@ -119,29 +116,28 @@ plot(br, 35)
 # Example 3 - DOS correction
 dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
 brd <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
-                 ref_layer = 35, spectral_feature = 'radiance',
-                 DOS = TRUE, dark_path = dpath)
+                  ref_layer = 35, spectral_feature = 'radiance',
+                  dark_path = dpath)
 print(brd)
 plot(brd, 35)
 
 # Example 4 - compute reflectance
 bre <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
-                 ref_layer = 35, spectral_feature = 'reflectance',
-                 reflectance_method = "irradiance",
-                 DOS = TRUE, dark_path = dpath)
+                  ref_layer = 35, spectral_feature = 'reflectance',
+                  reflectance_method = "irradiance",
+                  dark_path = dpath)
 print(bre)
 plot(bre, 35)
 
-# Example 5 - there is a white-reference panel in this image!
+# Example 5 - there is a white-reference panel in this image
 idmax <- which.max(bre[[35]])
-plot(bre, 35)
+plot(bre, 35, asp = 0)
 points(xyFromCell(bre[[35]], idmax), pch = 3)
 
 bre2 <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
-                  ref_layer = 35, spectral_feature = 'reflectance',
-                  reflectance_method = "white_panel",
-                  white_path = path,
-                  DOS = TRUE, dark_path = dpath)
+                   ref_layer = 35, spectral_feature = 'reflectance',
+                   reflectance_method = "white_panel",
+                   white_path = path, dark_path = dpath)
 print(bre2)
 plot(bre2, 35)
 

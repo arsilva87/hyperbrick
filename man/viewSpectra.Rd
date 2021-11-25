@@ -24,7 +24,7 @@ im <- buildBrick(p, ref_layer = 35,
 plotRGB(im, r = 63, b = 34, g = 11, scale = 90, axes = TRUE)
 
 sw <- slideWindows(im)
-lapply(sw, lines, col = "white")
+lapply(sw, lines, col = "white") -> null_obj
 
 sb <- slideBrick(im, sw, fun = mean)
 head(sb)
