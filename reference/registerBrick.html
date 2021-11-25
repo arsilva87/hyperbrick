@@ -79,7 +79,7 @@ of Oriented Gradient) descriptor in order to find the optimal translations
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hyperbrick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
       </span>
     </div>
 
@@ -184,7 +184,7 @@ optimization algorithm.</p>
 <span class='r-in'><span class='va'>dpath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>'exdata'</span>, <span class='st'>'obory_dark.dat'</span>, package <span class='op'>=</span> <span class='st'>'hyperbrick'</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>im</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildBrick.html'>buildBrick</a></span><span class='op'>(</span><span class='va'>path</span>, hFOV <span class='op'>=</span> <span class='fl'>36.8</span>, vFOV <span class='op'>=</span> <span class='fl'>36.8</span>, height <span class='op'>=</span> <span class='fl'>45</span>,</span>
 <span class='r-in'>                ref_layer <span class='op'>=</span> <span class='fl'>35</span>, spectral_feature <span class='op'>=</span> <span class='st'>'radiance'</span>,</span>
-<span class='r-in'>                DOS <span class='op'>=</span> <span class='cn'>TRUE</span>, dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
+<span class='r-in'>                dark_path <span class='op'>=</span> <span class='va'>dpath</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>im</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> class      : RasterBrick </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> dimensions : 128, 128, 16384, 81  (nrow, ncol, ncell, nlayers)</span>
