@@ -1,4 +1,6 @@
-# About
+
+<img align="right" src="logo_hyperbrick.png" width="16%" height="16%">
+
 
 *hyperbrick: Accessory Tools for (Pre)Processing Hyperspectral Images*
 
@@ -21,4 +23,4 @@ Check the package documentation to see examples of its functions.
 
 # Contact
 
-**hyperbrick** is an ongoing project. Contributions are very welcome. If you have a question or have found a bug, please open an ![Issue](https://github.com/arsilva87/hyperbrick/issues) or reach out directly by e-mail: anderson.silva@ifgoiano.edu.br.
+**hyperbrick** is an ongoing project. Contributions are very welcome. If you have a question or have found a bug, please open an [Issue](https://github.com/arsilva87/hyperbrick/issues) or reach out directly by [e-mail](mailto:anderson.silva@ifgoiano.edu.br).
