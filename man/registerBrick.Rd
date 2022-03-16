@@ -4,7 +4,14 @@
 \alias{registerBrick}
 \title{Hyperspectral Image Registration (Translation)}
 \usage{
-registerBrick(Brick, ref_layer = 1, layers = "all", ncells = 24, orient = 8)
+registerBrick(
+  Brick,
+  ref_layer = 1,
+  layers = "all",
+  ncells = 24,
+  orient = 8,
+  cl = NULL
+)
 }
 \arguments{
 \item{Brick}{An object of class \code{RasterBrick} or \code{RasterStack}
@@ -23,6 +30,9 @@ gradients of the HOG descriptor. Default is 24. See \code{\link[OpenImageR:HOG]{
 
 \item{orient}{An integer giving the number of orientations to compute the
 oriented gradients of the HOG descriptor. Default is 8. See \code{\link[OpenImageR:HOG]{OpenImageR::HOG()}}.}
+
+\item{cl}{An integer indicating the number of parallel processes or an
+object created by \code{\link[parallel:makeCluster]{parallel::makeCluster()}}. Default if \code{NULL}.}
 }
 \value{
 An object of the same classe as the input \code{slave}, with
@@ -36,7 +46,7 @@ a geometric correction is necessary for remote sensing applications such
 as combining/merging spectral bands. This function uses the HOG (Histogram
 of Oriented Gradient) descriptor in order to find the optimal translations
 (xy shift) on multiple 'slave' bands to be spatially align with a 'master'
-(reference) band.
+(reference) band. Parallel processing is allowed.
 }
 \details{
 This should be used carefully, as rotation affects the spatial
@@ -47,14 +57,14 @@ optimization algorithm.
 path <- system.file('exdata', 'obory.dat', package = 'hyperbrick')
 dpath <- system.file('exdata', 'obory_dark.dat', package = 'hyperbrick')
 im <- buildBrick(path, hFOV = 36.8, vFOV = 36.8, height = 45,
-                ref_layer = 35, spectral_feature = 'radiance',
-                dark_path = dpath)
+                 ref_layer = 35, spectral_feature = 'radiance',
+                 dark_path = dpath)
 print(im)
-plotRGB(im, r = 63, g = 34, b = 11, scale = 90)
+plotRGB(im, r = 63, g = 34, b = 11, stretch = 'lin')
 
 imreg <- registerBrick(im, ref_layer = 35, layers = c(63, 34, 11))
 imreg
-plotRGB(imreg, scale = 90)
+plotRGB(imreg, stretch = 'lin')
 
 }
 \seealso{
