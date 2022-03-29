@@ -60,6 +60,7 @@
 #'
 #' @importFrom OpenImageR HOG
 #' @importFrom raster extent crop res shift
+#' @importFrom stats optim
 #'
 #' @aliases registerBand3
 #'

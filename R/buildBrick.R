@@ -159,8 +159,8 @@ buildBrick <- function(path,
   }
   rb <- brick(A)
   if(!is.null(HDR$extents)) {
-    extent(rb) <- extent(HDR$extents[ref_layer,])
-    crs(rb) <- HDR$CRS
+    raster::extent(rb) <- raster::extent(HDR$extents[ref_layer,])
+    raster::crs(rb) <- HDR$CRS
   }
   names(rb) <- paste0("b", HDR$wavelength)
   return(rb)

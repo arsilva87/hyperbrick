@@ -90,7 +90,7 @@ registerBrick <- function(Brick, ref_layer = 1,
   cropped_ext <- extent(c(max(rexts[,1]), min(rexts[,2]),
                           max(rexts[,3]), min(rexts[,4])))
   newlist <- lapply(newbands, function(x) {
-    origin(x) <- c(0,0)
+    raster::origin(x) <- c(0,0)
     crop(x, cropped_ext)
   })
   regbrick <- brick(newlist)
