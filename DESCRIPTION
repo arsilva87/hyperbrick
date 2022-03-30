@@ -23,9 +23,13 @@ LazyData: true
 LazyLoad: true
 Depends: raster
 Imports: rgdal, OpenImageR, caTools, dfoptim, pbapply
-Suggests: knitr, rmarkdown
+Suggests: 
+    knitr,
+    rmarkdown,
+    spelling
 VignetteBuilder: knitr
 URL: https://github.com/arsilva87/hyperbrick
 BugReports: https://github.com/arsilva87/hyperbrick/issues
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
+Language: en-US
