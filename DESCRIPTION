@@ -1,10 +1,10 @@
 Package: hyperbrick
 Type: Package
-Title: Accessory Tools for Pre-Processing Hyperspectral Images
+Title: Accessory Tools for Preprocessing Hyper-Spectral Images
 Version: 1.0
 Date: 2022-03-29
-Description: Read and pre-process hyperspectral images. These type of
-    sensor data is usually recorded in some raw format. This package
+Description: Read and execute preprocessing procedures on hyper-spectral images. 
+    These type of sensor data is usually recorded in some raw format. This package
     contains some easy-to-use functions to promptly build the image with
     some basic radiometric calibrations and setting up the spatial information. 
     Geometric correction can be done with band-to-band registration (translation 
@@ -27,7 +27,6 @@ Suggests:
     knitr,
     rmarkdown,
     spelling
-VignetteBuilder: knitr
 URL: https://github.com/arsilva87/hyperbrick
 BugReports: https://github.com/arsilva87/hyperbrick/issues
 RoxygenNote: 7.1.2
